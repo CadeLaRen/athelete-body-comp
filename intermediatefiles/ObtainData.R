@@ -32,19 +32,32 @@ write.csv(surf, file = "surf2_w3cols.csv", row.names = FALSE)
 ## copy and paste height and weight info from WCT website http://www.worldsurfleague.com/athletes/tour/mct to excel 
 ## and save as "surf3_w6cols.csv"
 
+
+## Use this to load latest surf dataframe
 surf <- read.csv("surf3_w6cols.csv")
+
+## function ft_to_inch w argument x being a vector of heights 
+## feet and inches, in the format f'i" with f = number of feet, i = inches
 
 ft_to_inch <- function(x) {
     ## create vector of surf heights
-    hts_ft <- surf$height_ft
+    hts_ft <- x
     
+    ## load library for str_split_fixed() 
+    library(stringr)
     ## remove " quotation mark from the end of the variable
-    hts_ft2 <- str_split_fixed(hts, "\"", 2)[, 1]
+    hts_ft2 <- str_split_fixed(hts_ft, "\"", 2)[, 1]
     
     ## split hts_ft into a data frame w variables for ft and inches 
     hts_ft_and_inches <- as.data.frame(str_split_fixed(hts_ft2, "'", 2))
-    names(hts_ft_and_inches) <- c("ft", "and inches")
+    names(hts_ft_and_inches) <- c("ft", "inches")
     
-    inches <- 6 * hts_ft_and_inches[1, 1] + hts_ft_and_inches[1, 2]
+    hts_ft_and_inches[, 1] <- as.numeric(levels(hts_ft_and_inches[, 1]))[hts_ft_and_inches[, 1]]
+    hts_ft_and_inches[, 2] <- as.numeric(levels(hts_ft_and_inches[, 2]))[hts_ft_and_inches[, 2]]
     
-    }
+    inches <- 12 * hts_ft_and_inches$ft + hts_ft_and_inches$inches
+    cms <- 2.54 * inches
+    
+    print(cms)
+}
+
