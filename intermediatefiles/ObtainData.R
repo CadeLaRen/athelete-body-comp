@@ -34,3 +34,17 @@ write.csv(surf, file = "surf2_w3cols.csv", row.names = FALSE)
 
 surf <- read.csv("surf3_w6cols.csv")
 
+ft_to_inch <- function(x) {
+    ## create vector of surf heights
+    hts_ft <- surf$height_ft
+    
+    ## remove " quotation mark from the end of the variable
+    hts_ft2 <- str_split_fixed(hts, "\"", 2)[, 1]
+    
+    ## split hts_ft into a data frame w variables for ft and inches 
+    hts_ft_and_inches <- as.data.frame(str_split_fixed(hts_ft2, "'", 2))
+    names(hts_ft_and_inches) <- c("ft", "and inches")
+    
+    inches <- 6 * hts_ft_and_inches[1, 1] + hts_ft_and_inches[1, 2]
+    
+    }
